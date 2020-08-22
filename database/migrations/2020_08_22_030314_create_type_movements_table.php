@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRunBoxesTable extends Migration
+class CreateTypeMovementsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateRunBoxesTable extends Migration
      */
     public function up()
     {
-        Schema::create('run_boxes', function (Blueprint $table) {
+        Schema::create('type_movements', function (Blueprint $table) {
             $table->id();
-            $table->datetime('fecha_inicio');
-            $table->decimal('import_inicio',8,2);
-            $table->datetime('fecha_fin')->nullable();
-            $table->decimal('import_fin',8,2)->nullable();
-            $table->foreignId('box_id')->constrained();
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes(); 
         });
     }
 
@@ -31,6 +28,6 @@ class CreateRunBoxesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('run_boxes');
+        Schema::dropIfExists('type_movements');
     }
 }
