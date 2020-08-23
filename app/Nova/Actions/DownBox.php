@@ -9,11 +9,11 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use App\RunBox;
-
+use Carbon\Carbon;
 class DownBox extends Action
 {
     use InteractsWithQueue, Queueable;
-
+    public $name = 'Cerrar Caja';
     /**
      * Perform the action on the given models.
      *
@@ -28,15 +28,18 @@ class DownBox extends Action
         }
 
         foreach ($models as $model) {
-            $model->cantidad = $fields->cantidad;
+            if ($model->status == "cerrada") {
+                return Action::danger('Esta caja ya esta cerrada');
+            }
             $model->status = "cerrada";
             $model->save();
             $model->runbox()->update([
                 'fecha_fin'=> Carbon::now(),
+                'user_of_id' => auth()->user()->id,
                 'import_fin' => $model->cantidad
             ]);
         }
-        return Action::message('Caja Iniciada');
+        return Action::message('Caja Cerrada');
     }
 
     /**

@@ -2,24 +2,32 @@
 
 namespace App\Nova;
 
-use App\Nova\Actions\RunBox; 
-use App\Nova\Actions\DownBox; 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\Currency;
-use Laravel\Nova\Fields\Badge;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Box extends Resource
+class Movement extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Box::class;
-
+    public static $model = \App\Movement::class;
+    
+    public static function label()
+    {
+        return 'Movimientos';
+    }
+    public static function singularLabel()
+    {
+        return 'movimiento';
+    }
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
@@ -27,21 +35,13 @@ class Box extends Resource
      */
     public static $title = 'description';
     
-    public static function label()
-    {
-        return 'Cajas';
-    }
-    public static function singularLabel()
-    {
-        return 'caja';
-    }
     /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
-        'id','name','description'
+        'id','desription','ammount'
     ];
 
     /**
@@ -54,13 +54,15 @@ class Box extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Nombre', 'name')->sortable(),
-            Text::make('Descripcion', 'description'),
-            Currency::make('Cantidad'),
-            Badge::make('Status')->map([
-                'cerrada' => 'danger',
-                'iniciada' => 'success'
-            ])
+            BelongsTo::make('Tipo-Mov','tipomovimiento','App\Nova\TypeMovement'),
+            Textarea::make('Descripcion','description')
+                      ->sortable()
+                      ->rows(3),
+            Currency::make('Cantidad','ammount')->sortable(),
+            BelongsTo::make('Cuenta','box','App\Nova\Box'),
+            Hidden::make('User', 'user_id')->default(function ($request) {
+                return $request->user()->id;
+            })
         ];
     }
 
@@ -105,9 +107,6 @@ class Box extends Resource
      */
     public function actions(Request $request)
     {
-        return [
-            new RunBox,
-            new DownBox
-        ];
+        return [];
     }
 }

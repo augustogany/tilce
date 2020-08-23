@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use App\Movement;
+use App\Observers\MovementObserver;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -17,6 +19,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+        Nova::serving(function () {
+            Movement::observe(MovementObserver::class);
+        });
     }
 
     /**

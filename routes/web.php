@@ -14,5 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    //$diactual = \Carbon\Carbon::today()->day;
+    //return $year = \App\Box::whereDay('updated_at',$diactual)->get();
     return view('welcome');
 });

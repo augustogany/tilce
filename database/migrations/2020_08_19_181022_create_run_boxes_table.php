@@ -17,8 +17,14 @@ class CreateRunBoxesTable extends Migration
             $table->id();
             $table->datetime('fecha_inicio');
             $table->decimal('import_inicio',8,2);
+            $table->foreignId('user_on_id')
+                  ->nullable()
+                  ->constrained('users');
             $table->datetime('fecha_fin')->nullable();
             $table->decimal('import_fin',8,2)->nullable();
+            $table->foreignId('user_of_id')
+                  ->nullable()
+                  ->constrained('users');
             $table->foreignId('box_id')->constrained();
             $table->timestamps();
         });

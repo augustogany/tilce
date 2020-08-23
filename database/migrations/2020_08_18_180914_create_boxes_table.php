@@ -17,7 +17,7 @@ class CreateBoxesTable extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('cantidad',8,2);
-            $table->string('status',['iniciada','cerrada'])->default('cerrada');
+            $table->enum('status',['iniciada','cerrada'])->default('cerrada');
             $table->string('description');
             $table->timestamps();
             $table->softDeletes();

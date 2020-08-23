@@ -16,7 +16,7 @@ class RunBox extends Action
 {
     use InteractsWithQueue, Queueable;
     
-    public $name = 'Encender Caja';
+    public $name = 'Iniciar Caja';
 
     /**
      * Perform the action on the given models.
@@ -32,12 +32,16 @@ class RunBox extends Action
         }
 
         foreach ($models as $model) {
+            if ($model->status == "iniciada") {
+                return Action::danger('Esta caja ya esta iniciada');
+            }
             $model->cantidad = $fields->cantidad;
             $model->status = "iniciada";
             $model->save();
             $model->runbox()->create([
                 'fecha_inicio'=> Carbon::now(),
-                'import_inicio' => $fields->cantidad
+                'import_inicio' => $model->cantidad,
+                'user_on_id' => auth()->user()->id
             ]);
         }
         return Action::message('Caja Iniciada');

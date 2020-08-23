@@ -19,8 +19,9 @@ class CreateMovementsTable extends Migration
             $table->decimal('ammount',8,2);
             $table->timestamps();
             $table->foreignId('box_id')
-                  ->constrained()
-                  ->nullable();
+                  ->constrained();
+            $table->foreignId('user_id')
+                  ->constrained();
             $table->unsignedBigInteger('type_movement_id');
             $table->foreign('type_movement_id')->references('id')->on('type_movements');
         });
