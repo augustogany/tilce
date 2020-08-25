@@ -31,9 +31,12 @@ class MovementObserver
      * @param  \App\Movement  $movement
      * @return void
      */
-    public function updated(Movement $movement)
+    public function updating(Movement $movement)
     {
+        $orgmov = Movement::find($movement->id);
         $caja = \App\Box::findOrFail($movement->box_id);
+        $caja->cantidad -= $orgmov->ammount;
+        $caja->update();
         if ($movement->type_movement_id == 1) {
             $caja->cantidad += $movement->ammount; 
         } else {
