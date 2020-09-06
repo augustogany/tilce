@@ -17,13 +17,13 @@ class CreateMovementsTable extends Migration
             $table->id();
             $table->text('description');
             $table->decimal('ammount',8,2);
-            $table->timestamps();
             $table->foreignId('box_id')
                   ->constrained();
             $table->foreignId('user_id')
                   ->constrained();
-            $table->unsignedBigInteger('type_movement_id');
-            $table->foreign('type_movement_id')->references('id')->on('type_movements');
+            $table->foreignId('type_movement_id')
+                    ->constrained('type_movements'); 
+             $table->timestamps();           
         });
     }
 

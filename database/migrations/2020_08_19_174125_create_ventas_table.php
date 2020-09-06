@@ -16,10 +16,10 @@ class CreateVentasTable extends Migration
         Schema::create('ventas', function (Blueprint $table) {
             $table->id();
             $table->decimal('total',8,2);
-            $table->string('estado');
+            $table->string('estado')->nullable();
             $table->foreignId('customer_id')->constrained();
-            $table->unsignedBigInteger('type_payment_id');
-            $table->foreign('type_payment_id')->references('id')->on('type_payments');
+            $table->foreignId('type_sale_id')->constrained('type_sales');
+            $table->foreignId('type_payment_id')->constrained('type_payments');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

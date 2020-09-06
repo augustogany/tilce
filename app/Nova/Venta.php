@@ -5,43 +5,44 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Movement extends Resource
+class Venta extends Resource
 {
+   
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Movement::class;
+    public static $model = \App\Venta::class;
     
     public static function label()
     {
-        return 'Movimientos';
+        return 'Pedidos';
     }
     public static function singularLabel()
     {
-        return 'movimiento';
+        return 'pedido';
     }
+
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'description';
-    
+    public static $title = 'id';
+
     /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
-        'id','description','ammount'
+        'id',
     ];
 
     /**
@@ -54,12 +55,11 @@ class Movement extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('Tipo-Mov','tipomovimiento','App\Nova\TypeMovement'),
-            Textarea::make('Descripcion','description') 
-                      ->sortable()
-                      ->rows(3),
-            Currency::make('Cantidad','ammount')->sortable(),
-            BelongsTo::make('Cuenta','box','App\Nova\Box'),
+            BelongsTo::make('Cliente','customer','App\Nova\Customer')
+                       ->searchable()
+                       ->showCreateRelationButton(),
+            BelongsTo::make('Tipo Pago','type_payment','App\Nova\TypePayment'),
+            HasMany::make("Detalle","detalles",\App\Nova\DetalleVenta::class)->inline(),
             Hidden::make('User', 'user_id')->default(function ($request) {
                 return $request->user()->id;
             })
