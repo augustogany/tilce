@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Hidden;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -47,8 +48,8 @@ class DetalleVenta extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('Producto','product','App\Nova\Product'),
-            ID::make(__('Precio')),
-            ID::make(__('Cantidad')),
+            Number::make('Precio'),
+            Number::make('Cantidad'),
         ];
     }
 
